@@ -1,0 +1,61 @@
+{
+    "name": "gusmanwidodo/auth-kit-permissions",
+    "description": "High-performance roles & permissions plugin for Auth-Kit. Hybrid static (zero-query) + dynamic (DB) access control with polymorphic scoping, organization-ready. Faster than spatie/laravel-permission for the common case.",
+    "keywords": ["laravel", "auth-kit", "permissions", "roles", "rbac", "access-control", "authorization", "multi-tenant"],
+    "homepage": "https://github.com/gusmanwidodo/auth-kit-permissions",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Gusman Widodo",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": "^8.3",
+        "gusmanwidodo/auth-kit": "@dev",
+        "illuminate/contracts": "^12.0",
+        "illuminate/database": "^12.0",
+        "illuminate/support": "^12.0"
+    },
+    "require-dev": {
+        "orchestra/testbench": "^10.0",
+        "pestphp/pest": "^3.0",
+        "pestphp/pest-plugin-laravel": "^3.0",
+        "spatie/laravel-permission": "^6.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Gusmanwidodo\\AuthKitPermissions\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Gusmanwidodo\\AuthKitPermissions\\Tests\\": "tests/",
+            "Gusmanwidodo\\AuthKitPermissions\\Benchmark\\": "benchmark/"
+        }
+    },
+    "scripts": {
+        "test": "vendor/bin/pest",
+        "bench": "php benchmark/run.php"
+    },
+    "config": {
+        "sort-packages": true,
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Gusmanwidodo\\AuthKitPermissions\\PermissionsServiceProvider"
+            ]
+        }
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true,
+    "repositories": [{
+        "name": "auth-kit",
+        "type": "path",
+        "url": "../auth-kit"
+    }]
+}

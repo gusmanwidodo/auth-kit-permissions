@@ -1,0 +1,54 @@
+name: Tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        php: ['8.3', '8.4']
+        laravel: ['12.*']
+
+    name: PHP ${{ matrix.php }} - Laravel ${{ matrix.laravel }}
+
+    steps:
+      - name: Checkout plugin
+        uses: actions/checkout@v4
+        with:
+          path: auth-kit-permissions
+
+      # Test against the core from its repo until the pinned version is on Packagist.
+      - name: Checkout core
+        uses: actions/checkout@v4
+        with:
+          repository: gusmanwidodo/auth-kit
+          path: auth-kit
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: mbstring, sqlite3, pdo_sqlite
+          coverage: none
+
+      - name: Point Composer at the local core
+        working-directory: auth-kit-permissions
+        run: |
+          composer config repositories.auth-kit path ../auth-kit
+          composer require "gusmanwidodo/auth-kit:@dev" --no-interaction --no-update
+
+      - name: Install dependencies
+        working-directory: auth-kit-permissions
+        run: |
+          composer require "laravel/framework:${{ matrix.laravel }}" --no-interaction --no-update
+          composer update --prefer-dist --no-interaction
+
+      - name: Run tests
+        working-directory: auth-kit-permissions
+        run: composer test
